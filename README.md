@@ -11,7 +11,7 @@ Input objects are generic JSON (string key -> any value). To describe mutations,
 
 Given this initial state:
 
-```
+```json
 {
   "myarr": [3, 1],
   "myarr2": [10, 11],
@@ -37,7 +37,7 @@ Add this mutation:
 
 The result would be:
 
-```
+```json
 {
   "myarr": [3, 1, 5],
   "myarr2": [1],
