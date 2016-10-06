@@ -80,7 +80,7 @@ func buildMapMutation(oldObjMap, newObjMap map[string]interface{}, res map[strin
 }
 
 // Recursively build a mutation
-func BuildMutation(oldObj, newObj interface{}) map[string]interface{} {
+func BuildMutation(oldObj, newObj map[string]interface{}) map[string]interface{} {
 	return doBuildMutation(oldObj, newObj).(map[string]interface{})
 }
 
