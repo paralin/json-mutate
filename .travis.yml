@@ -1,0 +1,19 @@
+language: go
+go:
+  - 1.7.1
+cache:
+  directories:
+    - js/node_modules
+
+before_install:
+  - nvm install 6.6.0
+
+install:
+  - go get -t -v ./...
+  - cd ./js && npm install && cd ..
+
+script:
+  - go test .
+
+  # Run JavaScript tests
+  - cd ./js && npm run test && cd ..
