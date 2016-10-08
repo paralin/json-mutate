@@ -7,7 +7,8 @@
     "lint": "tslint -c tslint.json src/**/*.ts --type-check",
     "build": "tsc",
     "test": "npm run lint && npm run mocha",
-    "ci": "npm run build && npm run test && istanbul-coveralls",
+    "ci": "npm run build && npm run test && npm run reportcov",
+    "reportcov": "cd .. && cat ./js/coverage/lcov.info | coveralls && cd -",
     "mocha": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json"
   },
   "repository": {
@@ -29,8 +30,8 @@
     "@types/jasmine": "^2.5.35",
     "babel-core": "^6.17.0",
     "babel-preset-es2015": "^6.16.0",
+    "coveralls": "^2.11.14",
     "istanbul": "^1.1.0-alpha.1",
-    "istanbul-coveralls": "^1.0.3",
     "jasmine": "^2.5.2",
     "ts-node": "^1.4.1",
     "tslint": "^3.15.1",
