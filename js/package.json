@@ -1,0 +1,36 @@
+{
+  "name": "json-mutate",
+  "description": "Generate and apply descriptions of changes between objects.",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "lint": "tslint -c tslint.json src/**/*.ts --type-check",
+    "build": "tsc",
+    "test": "npm run lint && npm run mocha",
+    "mocha": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paralin/mutate.git"
+  },
+  "keywords": [
+    "mutate",
+    "js",
+    "typescript"
+  ],
+  "author": "Christian Stewart <christian@paral.in>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paralin/mutate/issues"
+  },
+  "homepage": "https://github.com/paralin/mutate#readme",
+  "devDependencies": {
+    "@types/jasmine": "^2.5.35",
+    "babel-core": "^6.17.0",
+    "babel-preset-es2015": "^6.16.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "jasmine": "^2.5.2",
+    "ts-node": "^1.4.1",
+    "typescript": "^2.0.3"
+  }
+}

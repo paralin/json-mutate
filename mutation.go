@@ -243,7 +243,7 @@ func (*PullMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 		case int:
 			idx = idxi.(int)
 		default:
-			continue
+			return nil, errors.New("Argument to a pull mutation must be an array of integers.")
 		}
 
 		indexes[i] = idx
