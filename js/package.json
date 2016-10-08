@@ -33,6 +33,7 @@
     "istanbul-coveralls": "^1.0.3",
     "jasmine": "^2.5.2",
     "ts-node": "^1.4.1",
+    "tslint": "^3.15.1",
     "typescript": "^2.0.3"
   }
 }
