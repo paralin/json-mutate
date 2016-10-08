@@ -1,4 +1,4 @@
-Mutate
+Mutate [![codecov](https://codecov.io/gh/paralin/mutate/branch/master/graph/badge.svg)](https://codecov.io/gh/paralin/mutate) [![Coverage Status](https://coveralls.io/repos/github/paralin/mutate/badge.svg?branch=master)](https://coveralls.io/github/paralin/mutate?branch=master) [![Build Status](https://travis-ci.org/paralin/mutate.svg?branch=master)](https://travis-ci.org/paralin/mutate)
 ======
 
 A mutation is a descriptor of operations on a source object to produce a desired result object. This package compares two objects and generates an object that describes what changed between the two input objects, and then can apply that mutation to the source object to produce the target object.
