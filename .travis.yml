@@ -9,11 +9,12 @@ before_install:
   - nvm install 6.6.0
 
 install:
+  - go get github.com/mattn/goveralls
   - go get -t -v ./...
   - cd ./js && npm install && cd ..
 
 script:
-  - go test .
+  - $HOME/gopath/bin/goveralls -service=travis-ci
 
   # Run JavaScript tests
   - cd ./js && npm run ci && cd ..
