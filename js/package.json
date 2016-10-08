@@ -7,7 +7,7 @@
     "lint": "tslint -c tslint.json src/**/*.ts --type-check",
     "build": "tsc",
     "test": "npm run lint && npm run mocha",
-    "ci": "npm run bulid && npm run test && istanbul-coveralls",
+    "ci": "npm run build && npm run test && istanbul-coveralls",
     "mocha": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json"
   },
   "repository": {
