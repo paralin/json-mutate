@@ -240,8 +240,6 @@ func (*PullMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 		switch idxi.(type) {
 		case float64:
 			idx = int(idxi.(float64))
-		case int:
-			idx = idxi.(int)
 		default:
 			return nil, errors.New("Argument to a pull mutation must be an array of integers.")
 		}

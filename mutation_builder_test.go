@@ -26,6 +26,16 @@ func TestSetNull(t *testing.T) {
 	}
 }
 
+func TestSetNewField(t *testing.T) {
+	input := `{}`
+	after := `{"test": 1}`
+	expectedOutput := `{"test":1}`
+	if err := CheckMutationBuild(input, after, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
 func TestSetObject(t *testing.T) {
 	input := `{"test": "hello"}`
 	after := `{"test": {"test": 1}}`

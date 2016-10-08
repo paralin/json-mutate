@@ -26,6 +26,53 @@ func TestPullMutation(t *testing.T) {
 	}
 }
 
+func TestPullFromNil(t *testing.T) {
+	input := `{"test": null}`
+	mutation := `{"test": {"$pull": [0]}}`
+	expectedOutput := `{"test":null}`
+	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestPullNonArray(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$pull": 0}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error")
+		t.Fail()
+	}
+}
+
+func TestPullNonInteger(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$pull": ["0"]}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error")
+		t.Fail()
+	}
+}
+
+func TestPullNothing(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$pull": []}}`
+	expectedOutput := `{"test":[0,1,2]}`
+	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestPullFromNonArray(t *testing.T) {
+	input := `{"test": 0}`
+	mutation := `{"test": {"$pull": [0]}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error")
+		t.Fail()
+	}
+}
+
 func TestSetMutation(t *testing.T) {
 	input := `{"test": {"test2": [2, 3, 4, 5]}}`
 	mutation := `{"test": {"test2": {"$set": [0, 2]}}}`
@@ -46,6 +93,58 @@ func TestTruncateMutation(t *testing.T) {
 	}
 }
 
+func TestTruncateNil(t *testing.T) {
+	input := `{"test": null}`
+	mutation := `{"test": {"$truncate": 3}}`
+	expectedOutput := `{"test":null}`
+	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestTruncateNonArray(t *testing.T) {
+	input := `{"test": "kappa"}`
+	mutation := `{"test": {"$truncate": 3}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error.")
+		t.Fail()
+	}
+}
+
+func TestTruncateNilArg(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$truncate": null}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error.")
+		t.Fail()
+	}
+}
+
+func TestTruncateNonIntArg(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$truncate": "test"}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error.")
+		t.Fail()
+	}
+}
+
+func TestTruncateOutOfRange(t *testing.T) {
+	input := `{"test": [0,1,2]}`
+	mutation := `{"test": {"$truncate": -1}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error.")
+		t.Fail()
+	}
+	input = `{"test": [0,1,2]}`
+	mutation = `{"test": {"$truncate": 3}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error.")
+		t.Fail()
+	}
+}
+
 func TestUnsetMutation(t *testing.T) {
 	input := `{"test": {"test2": [0,1,2,3,4,5]}}`
 	mutation := `{"test": {"test2": {"$unset": null}}}`
@@ -57,11 +156,29 @@ func TestUnsetMutation(t *testing.T) {
 }
 
 func TestIndexMutation(t *testing.T) {
-	input := `{"test": [0,1,{"test2": "kappa", "test3": {"what": "yep"}},3]}`
-	mutation := `{"test": {"$mutateIdx": {"0": 2, "2": {"test2": "test","test3":{"what":null}}}}}`
-	expectedOutput := `{"test":[2,1,{"test2":"test","test3":{"what":null}},3]}`
+	input := `{"test": [0,1,{"test2": "kappa", "test3": {"what": "yep"}},3, [0]]}`
+	mutation := `{"test": {"$mutateIdx": {"0": 2, "2": {"test2": "test","test3":{"what":null}}, "4": {"$push": [1]}}}}`
+	expectedOutput := `{"test":[2,1,{"test2":"test","test3":{"what":null}},3,[0,1]]}`
 	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
 		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestIndexMutationError(t *testing.T) {
+	input := `{"test": [[0]]}`
+	mutation := `{"test": {"$mutateIdx": {"0": {"$push": 1}}}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("TestIndexMutationError should produce an error")
+		t.Fail()
+	}
+}
+
+func TestPushMutationError(t *testing.T) {
+	input := `{"test": [0]}`
+	mutation := `{"test": {"$push": null}}`
+	if err := CheckMutation(input, mutation, ""); err == nil {
+		t.Fatal("This should produce an error")
 		t.Fail()
 	}
 }
@@ -88,6 +205,16 @@ func TestMutationOfPrimitive(t *testing.T) {
 
 func TestPushToNil(t *testing.T) {
 	input := `{"test": null}`
+	mutation := `{"test": {"$push": [4]}}`
+	expectedOutput := `{"test":[4]}`
+	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestPushToNonArr(t *testing.T) {
+	input := `{"test": 0}`
 	mutation := `{"test": {"$push": [4]}}`
 	expectedOutput := `{"test":[4]}`
 	if err := CheckMutation(input, mutation, expectedOutput); err != nil {

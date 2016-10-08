@@ -117,8 +117,10 @@ func doBuildMutation(oldObj, newObj interface{}) interface{} {
 		buildMapMutation(oldObj.(map[string]interface{}), newObj.(map[string]interface{}), res)
 	}
 
+	/* This should never happen, we can't even test for this.
 	if len(res) == 0 {
 		return nil
 	}
+	*/
 	return res
 }
