@@ -16,4 +16,4 @@ script:
   - go test .
 
   # Run JavaScript tests
-  - cd ./js && npm run test && cd ..
+  - cd ./js && npm run ci && cd ..
