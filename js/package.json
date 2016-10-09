@@ -1,5 +1,6 @@
 {
   "name": "json-mutate",
+  "version": "1.0.1",
   "description": "Generate and apply descriptions of changes between objects.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,7 +10,9 @@
     "test": "npm run lint && npm run mocha",
     "ci": "npm run build && npm run test && npm run reportcov",
     "reportcov": "cd .. && cat ./js/coverage/lcov.info | coveralls && cd -",
-    "mocha": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json"
+    "mocha": "ts-node node_modules/istanbul/lib/cli.js cover -e .ts  -x \"*.d.ts\" -x \"*.spec.ts\" node_modules/jasmine/bin/jasmine.js -- JASMINE_CONFIG_PATH=jasmine.json",
+    "prepublish": "cp ../README.md .",
+    "postpublish": "rm README.md"
   },
   "repository": {
     "type": "git",
