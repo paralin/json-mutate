@@ -31,7 +31,7 @@ func buildSliceMutation(oldObjSlice, newObjSlice []interface{}, res map[string]i
 
 		// also, apply to old so the following mutations are correct
 		oldObjSlice = newObjSlice[0:lenNew]
-		lenOld = lenNew
+		// lenOld = lenNew
 	}
 
 	// MutateIdx
@@ -50,7 +50,7 @@ func buildSliceMutation(oldObjSlice, newObjSlice []interface{}, res map[string]i
 
 // map mutation
 func buildMapMutation(oldObjMap, newObjMap map[string]interface{}, res map[string]interface{}) {
-	for k, _ := range newObjMap {
+	for k := range newObjMap {
 		mutation := doBuildMutation(oldObjMap[k], newObjMap[k])
 		if mutation == nil {
 			// check if we are going from undefined -> nil
@@ -70,7 +70,7 @@ func buildMapMutation(oldObjMap, newObjMap map[string]interface{}, res map[strin
 	}
 
 	// Check for any fields that have been completely unset
-	for k, _ := range oldObjMap {
+	for k := range oldObjMap {
 		if _, ok := newObjMap[k]; !ok {
 			mutation := make(map[string]interface{})
 			mutation[MutationKeys[int(MutateUnset)]] = nil
@@ -79,7 +79,7 @@ func buildMapMutation(oldObjMap, newObjMap map[string]interface{}, res map[strin
 	}
 }
 
-// Recursively build a mutation
+// BuildMutation recursively builds a mutation from an old and new object.
 func BuildMutation(oldObj, newObj map[string]interface{}) map[string]interface{} {
 	return doBuildMutation(oldObj, newObj).(map[string]interface{})
 }

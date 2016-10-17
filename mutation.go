@@ -9,19 +9,27 @@ import (
 )
 
 //go:generate stringer -type=MutationType
+
+// MutationType represents a type of mutator, i.e. $set
 type MutationType int
 
 const (
+	// MutateSet represents the set mutation
 	MutateSet MutationType = iota
+	// MutatePush represents the push mutation
 	MutatePush
+	// MutatePull represents the pull mutation
 	MutatePull
+	// MutateTruncate represents the truncate mutation
 	MutateTruncate
+	// MutateIdx represents the index mutation
 	MutateIdx
+	// MutateUnset represents the unset mutation
 	MutateUnset
 )
 
-// Same order as above
-var MutationKeys []string = []string{
+// MutationKeys are the string mutation keys used to represent mutations.
+var MutationKeys = []string{
 	"$set",
 	"$push",
 	"$pull",
@@ -30,7 +38,8 @@ var MutationKeys []string = []string{
 	"$unset",
 }
 
-var MutationImpl []MutationImplementation = []MutationImplementation{
+// MutationImpl are implementations of the mutations named in MutationKeys
+var MutationImpl = []MutationImplementation{
 	&SetMutation{},
 	&PushMutation{},
 	&PullMutation{},
@@ -39,15 +48,17 @@ var MutationImpl []MutationImplementation = []MutationImplementation{
 	&UnsetMutation{},
 }
 
+// MutationImplementation represents an implementation of a mutation type
 type MutationImplementation interface {
 	Apply(oldVal, arg interface{}) (interface{}, error)
 }
 
+// Mutation is a wrapper class for an implementation type.
 type Mutation struct {
 	MutationType MutationType
 }
 
-// Apply all mutations in a mutation object heirarchy recursively
+// ApplyMutationObject applies all mutations in a mutation object hierarchy recursively
 func ApplyMutationObject(oldObj, mutations map[string]interface{}) (map[string]interface{}, error) {
 	if oldObj == nil || mutations == nil || len(mutations) == 0 {
 		return oldObj, nil
@@ -66,7 +77,7 @@ func ApplyMutationObject(oldObj, mutations map[string]interface{}) (map[string]i
 				continue
 			}
 			// check the first key to see if it's a mutation
-			for mk, _ := range vsi {
+			for mk := range vsi {
 				var newVal interface{}
 				var err error
 				if strings.HasPrefix(mk, "$") {
@@ -99,7 +110,7 @@ func ApplyMutationObject(oldObj, mutations map[string]interface{}) (map[string]i
 	return oldObj, nil
 }
 
-// Apply a mutation object to a value
+// ApplyMutation applies a mutation object to a value
 // Note: this changes the input
 func ApplyMutation(oldVal interface{}, mutation map[string]interface{}) (interface{}, error) {
 	// It's fastest to iterate over all known mutations in order
@@ -118,7 +129,7 @@ func ApplyMutation(oldVal interface{}, mutation map[string]interface{}) (interfa
 	return oldVal, nil
 }
 
-// Returns a Mutation from a key like $set or nil if not found
+// ParseMutation returns a Mutation from a key like $set or nil if not found
 func ParseMutation(key string) *Mutation {
 	key = strings.ToLower(key)
 	fi := -1
@@ -136,20 +147,25 @@ func ParseMutation(key string) *Mutation {
 	}
 }
 
+// Apply applies a single mutation, after being parsed with ParseMutation.
 func (m *Mutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return MutationImpl[int(m.MutationType)].Apply(oldVal, arg)
 }
 
+// SetMutation is a MutationImplementation for $set
 type SetMutation struct {
 }
 
+// Apply the $set mutation.
 func (*SetMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return arg, nil
 }
 
+// IndexMutation is a MutationImplementation for $mutateIdx
 type IndexMutation struct {
 }
 
+// Apply the $mutateIdx mutation.
 func (*IndexMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	oldArr, ok := oldVal.([]interface{})
 	if !ok {
@@ -190,9 +206,11 @@ func (*IndexMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return oldArr, nil
 }
 
+// PushMutation is the implementation for the $push mutation.
 type PushMutation struct {
 }
 
+// Apply the $push mutation.
 func (*PushMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	if oldVal == nil {
 		return arg, nil
@@ -215,9 +233,11 @@ func (*PushMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	}
 }
 
+// PullMutation is the implementation of the $pull mutation.
 type PullMutation struct {
 }
 
+// Apply the $pull mutation.
 func (*PullMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	if oldVal == nil {
 		return nil, nil
@@ -285,9 +305,11 @@ func (*PullMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return res, nil
 }
 
+// TruncateMutation is the implementation for the $truncate mutation.
 type TruncateMutation struct {
 }
 
+// Apply the $truncate mutation.
 func (*TruncateMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	if oldVal == nil {
 		return nil, nil
@@ -315,12 +337,15 @@ func (*TruncateMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return oldArr[0:argVal], nil
 }
 
+// UnsetMutation is the implementation of the $unset mutation.
 type UnsetMutation struct {
 }
 
+// Apply the $unset mutation.
 func (*UnsetMutation) Apply(oldVal, arg interface{}) (interface{}, error) {
 	return &UnsetMarker{}, nil
 }
 
+// UnsetMarker is a marker for unsetting a field returned from Apply
 type UnsetMarker struct {
 }
