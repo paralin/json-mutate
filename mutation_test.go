@@ -307,6 +307,16 @@ func TestMultiMutation(t *testing.T) {
 	}
 }
 
+func TestMutateIdx(t *testing.T) {
+	input := `{"test":["wow"]}`
+	mutation := `{"test":{"$mutateIdx":{"0":"wow"},"$push":[1]}}`
+	expectedOutput := `{"test":["wow",1]}`
+	if err := CheckMutation(input, mutation, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
 func CheckMutation(input, inputMutation, expectedOutput string) error {
 	// Parse input
 	var inputMap map[string]interface{}

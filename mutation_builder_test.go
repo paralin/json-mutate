@@ -106,6 +106,26 @@ func TestSetFirstTime(t *testing.T) {
 	}
 }
 
+func TestMutateIndexB(t *testing.T) {
+	input := `{"test":["dude",1]}`
+	after := `{"test":["wow",1]}`
+	expectedOutput := `{"test":{"$mutateIdx":{"0":"wow"}}}`
+	if err := CheckMutationBuild(input, after, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
+func TestMutateIndexC(t *testing.T) {
+	input := `{"test":["dude"]}`
+	after := `{"test":["wow",1]}`
+	expectedOutput := `{"test":{"$mutateIdx":{"0":"wow"},"$push":[1]}}`
+	if err := CheckMutationBuild(input, after, expectedOutput); err != nil {
+		t.Fatal(err.Error())
+		t.Fail()
+	}
+}
+
 func CheckMutationBuild(input, inputMutation, expectedOutput string) error {
 	// Parse input
 	var inputMap map[string]interface{}
