@@ -8,8 +8,8 @@ import (
 
 // Test going from before -> after -> back to before
 func TestTwoWayMutationA(t *testing.T) {
-	input := `{"test":[0,1,2]}`
-	mutation := `{"test":{"$mutateIdx":{"1":"2"},"$pull":[2]}}`
+	input := `{"test":[0,1,2,3,4,5]}`
+	mutation := `{"test":{"$mutateIdx":{"1":"2","4":"4"},"$pull":[2]}}`
 	// expectedOutput := `{"test":[0,"2"]}`
 	if err := CheckTwoWay(input, mutation); err != nil {
 		t.Fatal(err.Error())
