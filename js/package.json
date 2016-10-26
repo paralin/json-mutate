@@ -1,6 +1,6 @@
 {
   "name": "json-mutate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate and apply descriptions of changes between objects.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
