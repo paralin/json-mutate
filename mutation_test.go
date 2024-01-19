@@ -273,7 +273,8 @@ func TestInvalidMutateIdxArg(t *testing.T) {
 func TestInvalidMutateIdxKey(t *testing.T) {
 	input := `{"test": [0,1,2]}`
 	mutation := `{"test": {"$mutateIdx": {"fat": "2"}}}`
-	if err := CheckMutation(input, mutation, ""); err == nil || err.Error() != "Error parsing int in index mutation: strconv.ParseInt: parsing \"fat\": invalid syntax" {
+	err := CheckMutation(input, mutation, "")
+	if err == nil || err.Error() != "Error parsing int in index mutation: strconv.Atoi: parsing \"fat\": invalid syntax" {
 		t.Fatal(err.Error())
 		t.Fail()
 	}
