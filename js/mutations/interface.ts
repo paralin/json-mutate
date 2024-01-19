@@ -1,6 +1,6 @@
 export interface IMutationRecurse {
-  applyMutation(oldVal: any, mutation: Object): any;
-  applyMutationObject(oldObj: any, mutations: Object): Object;
+  applyMutation(oldVal: unknown, mutation: Record<string, unknown>): unknown;
+  applyMutationObject(oldObj: unknown, mutations: Record<string, unknown>): Record<string, unknown>;
 }
 
 export interface IMutation {
@@ -11,5 +11,5 @@ export interface IMutation {
   setRecurse?(rec: IMutationRecurse): void;
 
   // Apply the mutation to oldVal with argument arg.
-  apply(oldVal: any, arg: any): any;
+  apply(oldVal: unknown, arg: unknown): unknown;
 }

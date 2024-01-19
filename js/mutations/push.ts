@@ -1,9 +1,9 @@
-import { IMutation } from './interface';
+import { IMutation } from "./interface";
 
 export class PushMutation implements IMutation {
-  public mutationKey = '$push';
+  public mutationKey = "$push";
 
-  public apply(oldVal: any[], arg: any[]): any {
+  public apply(oldVal: unknown[], arg: unknown[]): unknown {
     if (!oldVal) {
       return arg;
     }
@@ -12,7 +12,7 @@ export class PushMutation implements IMutation {
       return arg;
     }
     if (arg.constructor !== Array) {
-      throw new TypeError('Argument to $push mutation must be an array.');
+      throw new TypeError("Argument to $push mutation must be an array.");
     }
 
     return oldVal.concat(arg);

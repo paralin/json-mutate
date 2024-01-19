@@ -1,27 +1,29 @@
-import { IMutation } from './interface';
+import { IMutation } from "./interface";
 
 export class PullMutation implements IMutation {
-  public mutationKey = '$pull';
+  public mutationKey = "$pull";
 
-  public apply(oldVal: any[], arg: any[]): any {
+  public apply(oldVal: unknown[], arg: unknown[]): unknown {
     if (!oldVal) {
       return null;
     }
 
     if (oldVal.constructor !== Array) {
-      throw new TypeError('Old value in $pull mutation must be an array.');
+      throw new TypeError("Old value in $pull mutation must be an array.");
     }
     if (arg.constructor !== Array) {
-      throw new TypeError('Argument to $pull mutation must be an array.');
+      throw new TypeError("Argument to $pull mutation must be an array.");
     }
     if (oldVal.length === 0) {
       return oldVal;
     }
 
-    let indexArr: number[] = [];
-    for (let idx of arg) {
-      if (typeof idx !== 'number') {
-        throw new TypeError('Argument to $pull mutation must be an array of integers.');
+    const indexArr: number[] = [];
+    for (const idx of arg) {
+      if (typeof idx !== "number") {
+        throw new TypeError(
+          "Argument to $pull mutation must be an array of integers.",
+        );
       }
       indexArr.push(idx);
     }
@@ -36,7 +38,7 @@ export class PullMutation implements IMutation {
     });
 
     // build output array
-    let res: any[] = [];
+    const res: unknown[] = [];
     // next index to ignore
     let nextIgnore = indexArr[0];
     // ignore index (current)
